@@ -6,41 +6,41 @@ module.exports = {
   env: process.env.NODE_ENV || 'development',
   port: parseInt(process.env.PORT, 10) || 8000,
   apiUrl: process.env.API_URL || 'http://localhost:8000',
-  clientUrl: process.env.CLIENT_URL || 'http://localhost:5173',
-  
+  clientUrl: process.env.CLIENT_URL || 'https://vendo-care.vercel.app',
+
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: process.env.CLIENT_URL || 'https://vendo-care.vercel.app',
     credentials: true,
   },
-  
+
 
   database: {
     url: process.env.DATABASE_URL,
   },
-  
+
   jwt: {
     secret: process.env.JWT_SECRET,
     refreshSecret: process.env.JWT_REFRESH_SECRET,
     expiresIn: process.env.JWT_EXPIRES_IN || '15m',
     refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
   },
-  
+
   redis: {
     url: process.env.REDIS_URL,
   },
-  
+
   cloudinary: {
     cloudName: process.env.CLOUDINARY_CLOUD_NAME,
     apiKey: process.env.CLOUDINARY_API_KEY,
     apiSecret: process.env.CLOUDINARY_API_SECRET,
   },
-  
+
   razorpay: {
     keyId: process.env.RAZORPAY_KEY_ID,
     keySecret: process.env.RAZORPAY_KEY_SECRET,
     webhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET,
   },
-  
+
   email: {
     host: process.env.SMTP_HOST,
     port: parseInt(process.env.SMTP_PORT, 10) || 587,
@@ -48,7 +48,7 @@ module.exports = {
     pass: process.env.SMTP_PASS,
     from: process.env.EMAIL_FROM || 'noreply@vendocare.com',
   },
- 
+
   oauth: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -59,7 +59,7 @@ module.exports = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
     },
   },
-  
+
   rateLimit: {
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 900000,
     maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS, 10) || 100,

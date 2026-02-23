@@ -36,7 +36,7 @@ app.use(helmet({
 
 
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  origin: process.env.CORS_ORIGIN || 'https://vendo-care.vercel.app',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -86,23 +86,23 @@ const PORT = process.env.PORT || 8000;
 const startServer = async () => {
   try {
     await connectDatabase();
-    
-    
+
+
     scheduler.init();
     logger.info('✅ Scheduled jobs initialized');
-    
-    
+
+
     initializeSocket(server);
     logger.info('✅ Socket.IO initialized');
-    
+
     server.listen(PORT, () => {
       logger.info(`🚀 Server running on port ${PORT}`);
       logger.info(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
       logger.info(`🔗 API Documentation: http://localhost:${PORT}/api`);
       logger.info(`🔌 Socket.IO ready for connections`);
     });
-    
-    
+
+
     const gracefulShutdown = (signal) => {
       logger.info(`${signal} received. Shutting down gracefully...`);
       scheduler.stop();
@@ -111,7 +111,7 @@ const startServer = async () => {
         process.exit(0);
       });
     };
-    
+
     process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
     process.on('SIGINT', () => gracefulShutdown('SIGINT'));
   } catch (error) {

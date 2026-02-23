@@ -29,7 +29,7 @@ class EmailTemplates {
             <li>Role: ${user.role}</li>
           </ul>
           <p>Please log in and complete your profile setup.</p>
-          <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}" 
+          <a href="${process.env.FRONTEND_URL || 'https://vendo-care.vercel.app'}" 
              style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-top: 16px;">
             Go to Dashboard
           </a>
@@ -45,8 +45,8 @@ class EmailTemplates {
   }
 
   async sendPasswordResetEmail(user, resetToken) {
-    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
-    
+    const resetUrl = `${process.env.FRONTEND_URL || 'https://vendo-care.vercel.app'}/reset-password?token=${resetToken}`;
+
     const mailOptions = {
       from: process.env.EMAIL_FROM || 'noreply@vendocare.com',
       to: user.email,
