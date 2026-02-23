@@ -9,8 +9,7 @@ export const useSocket = (url, events) => {
     useEffect(() => {
         if (!token) return;
 
-        
-        socketRef.current = io(url || 'http://localhost:8000', {
+        socketRef.current = io(url || 'https://vendocare-api.onrender.com', {
             auth: { token },
             transports: ['websocket'],
         });
@@ -21,7 +20,7 @@ export const useSocket = (url, events) => {
             console.log('Connected to real-time events');
         });
 
-        
+
         if (events) {
             Object.keys(events).forEach((event) => {
                 socket.on(event, events[event]);

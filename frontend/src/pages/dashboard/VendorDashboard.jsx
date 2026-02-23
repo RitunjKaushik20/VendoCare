@@ -88,7 +88,7 @@ export const VendorDashboard = () => {
   }, [fetchDashboardData, fetchNotifications])
 
 
-  useSocket(api.defaults.baseURL?.replace('/api', '') || 'http://localhost:8000', {
+  useSocket(api.defaults.baseURL?.replace('/api', '') || 'https://vendocare-api.onrender.com', {
     'invoice_created': () => {
       fetchDashboardData()
       fetchNotifications()
