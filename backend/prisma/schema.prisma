@@ -1,0 +1,311 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  name          String
+  phone         String?
+  avatar        String?
+  role          Role      @default(ADMIN)
+  isActive      Boolean   @default(true)
+  lastLogin     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  companyId     String?
+  company       Company?  @relation(fields: [companyId], references: [id])
+  createdVendors Vendor[] @relation("VendorCreatedBy")
+  vendor         Vendor?  @relation("VendorUser")
+  
+  @@index([email])
+  @@index([companyId])
+  @@index([role])
+}
+
+model Company {
+  id            String    @id @default(uuid())
+  name          String
+  address       String?
+  phone         String?
+  email         String?
+  gstNumber     String?
+  panNumber     String?
+  logo          String?
+  subscription  String    @default("trial") // trial, basic, premium, enterprise
+  subscriptionEnd DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  users         User[]
+  vendors       Vendor[]
+  contracts     Contract[]
+  invoices      Invoice[]
+  payments      Payment[]
+  
+  @@index([name])
+}
+
+model Vendor {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  phone         String?
+  address       String?
+  city          String?
+  state         String?
+  pincode       String?
+  country       String    @default("India")
+  category      String    // Construction, Security, Cleaning, etc.
+  gstNumber     String?
+  panNumber     String?
+  bankName      String?
+  bankAccount   String?
+  ifscCode     String?
+  rating        Float     @default(0)
+  totalSpent    Float     @default(0)
+  status        VendorStatus @default(ACTIVE)
+  documents     VendorDocument[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  companyId     String
+  company       Company   @relation(fields: [companyId], references: [id])
+  createdById  String
+  createdBy     User      @relation("VendorCreatedBy", fields: [createdById], references: [id])
+  userId        String?   @unique
+  user          User?     @relation("VendorUser", fields: [userId], references: [id])
+  contracts     Contract[]
+  invoices      Invoice[]
+  payments      Payment[]
+  
+  @@index([companyId])
+  @@index([email])
+  @@index([category])
+  @@index([status])
+}
+
+model Contract {
+  id            String    @id @default(uuid())
+  title         String
+  description   String?
+  amount        Float
+  currency      String    @default("INR")
+  paymentCycle  PaymentCycle @default(MONTHLY)
+  startDate     DateTime
+  endDate       DateTime
+  autoRenew     Boolean   @default(false)
+  status        ContractStatus @default(ACTIVE)
+  terms         String?
+  documents     ContractDocument[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  companyId     String
+  company       Company   @relation(fields: [companyId], references: [id])
+  vendorId      String
+  vendor        Vendor    @relation(fields: [vendorId], references: [id])
+  invoices      Invoice[]
+  
+  @@index([companyId])
+  @@index([vendorId])
+  @@index([status])
+  @@index([endDate]) // For expiry alerts
+}
+
+model Invoice {
+  id            String    @id @default(uuid())
+  invoiceNumber String    @unique
+  amount        Float
+  gstRate       Float     @default(18)
+  gstAmount     Float     @default(0)
+  totalAmount   Float
+  description   String?
+  status        InvoiceStatus @default(PENDING)
+  dueDate       DateTime
+  issueDate     DateTime  @default(now())
+  paidDate      DateTime?
+  approvedAt   DateTime?
+  rejectedAt    DateTime?
+  reminderSentAt DateTime?
+  approvedById  String?
+  fileUrl       String?
+  filePublicId  String?
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  companyId     String
+  company       Company   @relation(fields: [companyId], references: [id])
+  vendorId      String
+  vendor        Vendor    @relation(fields: [vendorId], references: [id])
+  contractId    String?
+  contract      Contract? @relation(fields: [contractId], references: [id])
+  payment       Payment?
+  
+  @@index([companyId])
+  @@index([vendorId])
+  @@index([status])
+  @@index([dueDate]) // For overdue alerts
+  @@index([invoiceNumber])
+}
+
+model Payment {
+  id            String    @id @default(uuid())
+  amount        Float
+  currency      String    @default("INR")
+  transactionId String?   @unique
+  method        PaymentMethod
+  status        PaymentStatus @default(PENDING)
+  paymentDate   DateTime
+  notes         String?
+  receiptUrl    String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  companyId     String
+  company       Company   @relation(fields: [companyId], references: [id])
+  vendorId      String
+  vendor        Vendor    @relation(fields: [vendorId], references: [id])
+  invoiceId     String    @unique
+  invoice       Invoice   @relation(fields: [invoiceId], references: [id])
+  
+  @@index([companyId])
+  @@index([vendorId])
+  @@index([status])
+  @@index([paymentDate])
+}
+
+model Notification {
+  id            String    @id @default(uuid())
+  type          NotificationType
+  title         String
+  message       String
+  data          Json?
+  isRead        Boolean   @default(false)
+  readAt        DateTime?
+  createdAt     DateTime  @default(now())
+  
+  @@index([type])
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id            String    @id @default(uuid())
+  action        String
+  entity        String
+  entityId      String
+  oldData       Json?
+  newData       Json?
+  ipAddress     String?
+  userAgent     String?
+  userId        String
+  createdAt     DateTime  @default(now())
+  
+  @@index([entity, entityId])
+  @@index([userId])
+  @@index([createdAt])
+}
+
+enum Role {
+  ADMIN
+  FINANCE
+  VENDOR
+}
+
+enum VendorStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  PENDING_APPROVAL
+}
+
+enum ContractStatus {
+  ACTIVE
+  EXPIRED
+  EXPIRING
+  PENDING
+  TERMINATED
+}
+
+enum InvoiceStatus {
+  PENDING
+  APPROVED
+  PAID
+  REJECTED
+  OVERDUE
+  CANCELLED
+}
+
+enum PaymentCycle {
+  MONTHLY
+  QUARTERLY
+  YEARLY
+  ONE_TIME
+}
+
+enum PaymentMethod {
+  BANK_TRANSFER
+  UPI
+  CHECK
+  CASH
+  CARD
+  WALLET
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum NotificationType {
+  CONTRACT_EXPIRING
+  PAYMENT_DUE
+  PAYMENT_RECEIVED
+  INVOICE_UPLOADED
+  INVOICE_APPROVED
+  PAYMENT_OVERDUE
+  WELCOME
+}
+
+model VendorDocument {
+  id            String    @id @default(uuid())
+  name          String
+  type          String
+  url           String
+  publicId      String?
+  vendorId      String
+  vendor        Vendor    @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  createdAt     DateTime  @default(now())
+  
+  @@index([vendorId])
+}
+
+model ContractDocument {
+  id            String    @id @default(uuid())
+  name          String
+  type          String
+  url           String
+  publicId      String?
+  contractId    String
+  contract      Contract  @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  createdAt     DateTime  @default(now())
+  
+  @@index([contractId])
+}

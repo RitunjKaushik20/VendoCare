@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: vendocare-api
+    repo: https://github.com/your-username/vendocare # Update this to your repo URL
+    env: node
+    buildCommand: npm install && npm run db:generate
+    startCommand: npm run db:deploy && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "8000"
+      - key: DATABASE_URL
+        sync: false # Set securely in Render Dashboard
+      - key: JWT_SECRET
+        sync: false # Set securely in Render Dashboard
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: CLIENT_URL
+        sync: false # e.g. https://vendocare.vercel.app
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: ADMIN_EMAIL
+        value: "admin@vendocare.com"

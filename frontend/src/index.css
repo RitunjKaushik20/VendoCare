@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply box-border;
+  }
+  
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply font-sans antialiased;
+    @apply bg-dark text-light;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-darkBg/80 backdrop-blur-xl border border-mauve/20 rounded-2xl;
+    @apply shadow-lg shadow-primary/10;
+  }
+  
+  .glass-input {
+    @apply bg-dark/50 border border-mauve/30 rounded-xl;
+    @apply focus:border-rose focus:ring-2 focus:ring-rose/30;
+    @apply transition-all duration-300;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary to-rose;
+    @apply text-white font-medium px-6 py-3 rounded-xl;
+    @apply hover:shadow-lg hover:shadow-primary/30;
+    @apply transition-all duration-300;
+    @apply active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-darkBg border border-mauve/30;
+    @apply text-light font-medium px-6 py-3 rounded-xl;
+    @apply hover:border-rose hover:bg-rose/10;
+    @apply transition-all duration-300;
+    @apply active:scale-95;
+  }
+
+  .sidebar-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl;
+    @apply text-light/70 hover:text-light hover:bg-rose/10;
+    @apply transition-all duration-300;
+  }
+
+  .sidebar-item.active {
+    @apply text-light bg-rose/20 border border-rose/30;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary via-rose to-coral;
+    @apply bg-clip-text text-transparent;
+  }
+  
+  .page-transition {
+    @apply animate-fade-in;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

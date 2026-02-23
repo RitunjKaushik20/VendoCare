@@ -1,0 +1,105 @@
+
+const CONSTANTS = {
+  
+  ROLES: {
+    ADMIN: 'ADMIN',
+    FINANCE: 'FINANCE',
+    VENDOR: 'VENDOR',
+  },
+
+  
+  VENDOR_STATUS: {
+    ACTIVE: 'ACTIVE',
+    INACTIVE: 'INACTIVE',
+    SUSPENDED: 'SUSPENDED',
+    PENDING_APPROVAL: 'PENDING_APPROVAL',
+  },
+
+  
+  CONTRACT_STATUS: {
+    ACTIVE: 'ACTIVE',
+    EXPIRED: 'EXPIRED',
+    EXPIRING: 'EXPIRING',
+    PENDING: 'PENDING',
+    TERMINATED: 'TERMINATED',
+  },
+
+  
+  INVOICE_STATUS: {
+    PENDING: 'PENDING',
+    PAID: 'PAID',
+    OVERDUE: 'OVERDUE',
+    CANCELLED: 'CANCELLED',
+  },
+
+  
+  PAYMENT_CYCLE: {
+    MONTHLY: 'MONTHLY',
+    QUARTERLY: 'QUARTERLY',
+    YEARLY: 'YEARLY',
+    ONE_TIME: 'ONE_TIME',
+  },
+
+  
+  PAYMENT_METHOD: {
+    BANK_TRANSFER: 'BANK_TRANSFER',
+    UPI: 'UPI',
+    CHECK: 'CHECK',
+    CASH: 'CASH',
+    CARD: 'CARD',
+    WALLET: 'WALLET',
+  },
+
+  
+  PAYMENT_STATUS: {
+    PENDING: 'PENDING',
+    COMPLETED: 'COMPLETED',
+    FAILED: 'FAILED',
+    REFUNDED: 'REFUNDED',
+  },
+
+  
+  NOTIFICATION_TYPE: {
+    CONTRACT_EXPIRING: 'CONTRACT_EXPIRING',
+    PAYMENT_DUE: 'PAYMENT_DUE',
+    PAYMENT_RECEIVED: 'PAYMENT_RECEIVED',
+    INVOICE_UPLOADED: 'INVOICE_UPLOADED',
+    INVOICE_APPROVED: 'INVOICE_APPROVED',
+    PAYMENT_OVERDUE: 'PAYMENT_OVERDUE',
+    WELCOME: 'WELCOME',
+  },
+
+  
+  SUBSCRIPTION: {
+    TRIAL: 'trial',
+    BASIC: 'basic',
+    PREMIUM: 'premium',
+    ENTERPRISE: 'enterprise',
+  },
+
+  
+  PAGINATION: {
+    DEFAULT_PAGE: 1,
+    DEFAULT_LIMIT: 10,
+    MAX_LIMIT: 100,
+  },
+
+  
+  JWT: {
+    EXPIRES_IN: '7d',
+    REFRESH_EXPIRES_IN: '30d',
+  },
+
+  
+  UPLOAD: {
+    MAX_FILE_SIZE: 10 * 1024 * 1024, 
+    ALLOWED_TYPES: ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg'],
+  },
+
+  
+  GST: {
+    DEFAULT_RATE: 18,
+  },
+};
+
+module.exports = CONSTANTS;
